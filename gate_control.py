@@ -1,7 +1,8 @@
 import serial
 import time
 
-def gate(alarm_off = False, alarm_on = False,  door_close = False, door_open = False):
+# Gibt dem Gate ein Befehl als Argument gesetzt auf True. Mögliche Befehle: alarm_off, alarm_on, door_close, door_open, door_keep_open. Beispiel: gate(alarm_on=True) => Aktiviert Alarm
+def gate(alarm_off = False, alarm_on = False,  door_close = False, door_open = False, door_keep_open = False):
     # Variablen auf Standard zurücksetzen
     SOI     = 0xAA   # Start of Information, immer AA
     RES     = 0x00   # Reserved, Standard 00
@@ -33,6 +34,9 @@ def gate(alarm_off = False, alarm_on = False,  door_close = False, door_open = F
         DATA1 = 0x02
     elif door_open:
         CID1 = 0x02
+    elif door_keep_open:
+        CID1 = 0x02
+        DATA1 = 0x01
     else:
         return "===== KEINE AKTION ERKANNT ====="
 
@@ -44,7 +48,6 @@ def gate(alarm_off = False, alarm_on = False,  door_close = False, door_open = F
 
     # Packet senden und Verbindung trennen
     ser.write(packet)
-    ser.close()
 
 
 # RS485-Port öffnen
